@@ -8,7 +8,7 @@ REAL_POP_SIZE = 100     # size of the real cohort to make the projections for
 NUM_SIM_COHORTS = 1000   # number of simulated cohorts used for making projections
 ALPHA = 0.05            # significance level
 
-if __name__ == '__main__':
+if __name__ == '__main__': # this line is needed to avoid errors that occur on Windows computers
 
     parallelMultiCohort = P.ParallelMultiCohort(
         ids=range(NUM_SIM_COHORTS),   # [0, 1, 2 ..., NUM_SIM_COHORTS-1]
