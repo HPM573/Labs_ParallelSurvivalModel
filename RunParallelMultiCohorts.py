@@ -1,19 +1,19 @@
-import Parallel as P
+import ParallelClasses as P
 import SimPy.FigureSupport as Fig
 
 
 MORTALITY_PROB = 0.1    # annual probability of mortality
-TIME_STEPS = 100        # simulation length
-REAL_POP_SIZE = 100     # size of the real cohort to make the projections for
-NUM_SIM_COHORTS = 1000   # number of simulated cohorts used for making projections
+TIME_STEPS = 100        # simulation length (years)
+N_COHORTS = 500         # number of cohorts
+COHORT_POP_SIZE = 100   # size of each cohort
 ALPHA = 0.05            # significance level
 
 if __name__ == '__main__': # this line is needed to avoid errors that occur on Windows computers
 
     parallelMultiCohort = P.ParallelMultiCohort(
-        ids=range(NUM_SIM_COHORTS),   # [0, 1, 2 ..., NUM_SIM_COHORTS-1]
-        pop_sizes=[REAL_POP_SIZE] * NUM_SIM_COHORTS,  # [REAL_POP_SIZE, REAL_POP_SIZE, ..., REAL_POP_SIZE]
-        mortality_probs=[MORTALITY_PROB]*NUM_SIM_COHORTS  # [p, p, ....]
+        ids=range(N_COHORTS),   # [0, 1, 2 ..., NUM_SIM_COHORTS-1]
+        pop_sizes=[COHORT_POP_SIZE]*N_COHORTS,  # [COHORT_POP_SIZE, COHORT_POP_SIZE, ..., COHORT_POP_SIZE]
+        mortality_probs=[MORTALITY_PROB]*N_COHORTS  # [p, p, ....]
     )
 
     parallelMultiCohort.simulate(TIME_STEPS)
@@ -27,8 +27,8 @@ if __name__ == '__main__': # this line is needed to avoid errors that occur on W
 
     # print projected mean survival time (years)
     print('Projected mean survival time (years)',
-          parallelMultiCohort.multiCohortOutcomes.overallMeanSurvivalTime)
+          parallelMultiCohort.multiCohortOutcomes.statMeanSurvivalTime.get_mean())
 
     # print projection interval
-    print('95% projection interval of average survival time (years)',
-          parallelMultiCohort.multiCohortOutcomes.sumStat_meanSurvivalTime.get_PI(ALPHA))
+    print('95% projection (prediction, percentile, or uncertainty) interval of average survival time (years)',
+          parallelMultiCohort.multiCohortOutcomes.statMeanSurvivalTime.get_PI(alpha=ALPHA))
