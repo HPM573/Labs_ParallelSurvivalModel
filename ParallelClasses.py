@@ -1,17 +1,18 @@
 import multiprocessing as mp
-import SurvivalModelClasses as Cls
+from SurvivalModelClasses import Cohort
 from MultiSurvivalModelClasses import MultiCohort
 
-MAX_PROCESSES = mp.cpu_count()  # maximum number of threads
+MAX_PROCESSES = mp.cpu_count()  # maximum number of processors
 
 
-def pool_function(cohort, n_time_steps):
+def simulate_this_cohort(cohort, n_time_steps):
     """
-    :param cohort:
-    :param n_time_steps:
+    :param cohort: a cohort of patients
+    :param n_time_steps: simulation length
     :return: cohort after being simulated
     """
 
+    # simulate and return the cohort
     cohort.simulate(n_time_steps)
     return cohort
 
@@ -28,19 +29,21 @@ class ParallelMultiCohort(MultiCohort):
         MultiCohort.__init__(self, ids, pop_sizes, mortality_probs)
         self.cohorts = []
 
+        # create cohorts
         for i in range(len(self.ids)):
-            # create a cohort
-            self.cohorts.append(
-                Cls.Cohort(id=self.ids[i], pop_size=self.popSizes[i], mortality_prob=self.mortalityProbs[i]))
+            self.cohorts.append(Cohort(id=self.ids[i],
+                                       pop_size=self.popSizes[i],
+                                       mortality_prob=self.mortalityProbs[i])
+                                )
 
     def simulate(self, n_time_steps, n_processes=MAX_PROCESSES):
 
         # create a list of arguments for simulating the cohorts in parallel
-        starmap_args = [(cohort, n_time_steps) for cohort in self.cohorts]
+        args = [(cohort, n_time_steps) for cohort in self.cohorts]
 
         # simulate all cohorts in parallel
         with mp.Pool(n_processes) as pl:
-            simulated_cohorts = pl.starmap(pool_function, starmap_args)
+            simulated_cohorts = pl.starmap(simulate_this_cohort, args)
 
         # outcomes from simulating all cohorts
         for cohort in simulated_cohorts:

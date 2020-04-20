@@ -10,12 +10,13 @@ ALPHA = 0.05            # significance level
 
 if __name__ == '__main__': # this line is needed to avoid errors that occur on Windows computers
 
+    # multi cohort to simulate in parallel
     parallelMultiCohort = P.ParallelMultiCohort(
         ids=range(N_COHORTS),   # [0, 1, 2 ..., NUM_SIM_COHORTS-1]
         pop_sizes=[COHORT_POP_SIZE]*N_COHORTS,  # [COHORT_POP_SIZE, COHORT_POP_SIZE, ..., COHORT_POP_SIZE]
         mortality_probs=[MORTALITY_PROB]*N_COHORTS  # [p, p, ....]
     )
-
+    # simulate the multi cohort
     parallelMultiCohort.simulate(TIME_STEPS)
 
     # plot the histogram of average survival time
