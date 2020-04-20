@@ -1,5 +1,5 @@
 import ParallelClasses as P
-import SimPy.FigureSupport as Fig
+import SimPy.Plots.Histogram as Hist
 
 
 MORTALITY_PROB = 0.1    # annual probability of mortality
@@ -19,7 +19,7 @@ if __name__ == '__main__': # this line is needed to avoid errors that occur on W
     parallelMultiCohort.simulate(TIME_STEPS)
 
     # plot the histogram of average survival time
-    Fig.graph_histogram(
+    Hist.plot_histogram(
         data=parallelMultiCohort.multiCohortOutcomes.meanSurvivalTimes,
         title='Histogram of Mean Survival Time',
         x_label='Mean Survival Time (Year)',
