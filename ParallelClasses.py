@@ -39,11 +39,8 @@ class ParallelMultiCohort(MultiCohort):
     def simulate(self, n_time_steps, n_processes=MAX_PROCESSES):
 
         # create a list of arguments for simulating the cohorts in parallel
-        args = [(cohort, n_time_steps) for cohort in self.cohorts]
 
         # simulate all cohorts in parallel
-        with mp.Pool(n_processes) as pl:
-            simulated_cohorts = pl.starmap(simulate_this_cohort, args)
 
         # outcomes from simulating all cohorts
         for cohort in simulated_cohorts:
