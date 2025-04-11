@@ -1,6 +1,6 @@
-import ParallelClasses as P
-import SimPy.Plots.Histogram as Hist
+import deampy.plots.histogram as Hist
 
+import ParallelClasses as P
 
 MORTALITY_PROB = 0.1    # annual probability of mortality
 TIME_STEPS = 100        # simulation length (years)
